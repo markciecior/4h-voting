@@ -1,0 +1,39 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+        args: [--allow-multiple-documents]
+    -   id: check-added-large-files
+    -   id: check-merge-conflict
+-   repo: https://github.com/adamchainz/django-upgrade
+    rev: "1.15.0"  # replace with latest tag on GitHub
+    hooks:
+    -   id: django-upgrade
+        args: [--target-version, "4.1"]   # Replace with Django version
+-   repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 23.11.0
+    hooks:
+    -   id: black
+    # It is recommended to specify the latest version of Python
+    # supported by your project here, or alternatively use
+    # pre-commit's default_language_version, see
+    # https://pre-commit.com/#top_level-default_language_version
+        language_version: python3.10
+-   repo: https://github.com/PyCQA/bandit
+    rev: '1.7.5'
+    hooks:
+    -   id: bandit
+        args:
+          - -s
+          - B501,B413
+-   repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.2
+    hooks:
+    -   id: python-safety-dependencies-check
+        entry: bash -c 'safety check "$@" || true'
+        verbose: true
