@@ -5,6 +5,7 @@ from .forms import UniqueForm, PeopleChoiceForm, CutestForm
 from .models import Pet
 import uuid
 
+
 def index(request):
     User = get_user_model()
     user_id = request.session.get("user", None)
@@ -14,12 +15,16 @@ def index(request):
         request.session["user"] = user.pk
     else:
         user = User.objects.get(pk=user_id)
-    
+
     if request.method == "POST":
         unique_form = UniqueForm(request.POST, prefix="unique_form")
         cutest_form = CutestForm(request.POST, prefix="cutest_form")
         people_choice_form = PeopleChoiceForm(request.POST, prefix="people_choice_form")
-        if unique_form.is_valid() and people_choice_form.is_valid() and cutest_form.is_valid():
+        if (
+            unique_form.is_valid()
+            and people_choice_form.is_valid()
+            and cutest_form.is_valid()
+        ):
             unique_pk = request.POST.get("unique_form-animal")
             cutest_pk = request.POST.get("cutest_form-animal")
             people_choice_pk = request.POST.get("people_choice_form-animal")
@@ -31,11 +36,7 @@ def index(request):
             user.profile.vote_people_choice = people_choice_pet
             user.profile.save()
             messages.success(request, "Vote recorded!")
-            return render(
-                request,
-                "voting4h/success.html",
-                {}
-            )
+            return render(request, "voting4h/success.html", {})
         else:
             messages.warning(request, "Improper votes, please try again.")
             return render(
@@ -46,15 +47,18 @@ def index(request):
                     "unique_form": unique_form,
                     "people_choice_form": people_choice_form,
                     "cutest_form": cutest_form,
-                }
+                },
             )
-    
+
     else:
         unique_form = UniqueForm(prefix="unique_form")
         people_choice_form = PeopleChoiceForm(prefix="people_choice_form")
         cutest_form = CutestForm(prefix="cutest_form")
         if user.profile.vote_cutest != None:
-            messages.warning(request, "Your vote has already been recorded.  You may modify your vote below.")
+            messages.warning(
+                request,
+                "Your vote has already been recorded.  You may modify your vote below.",
+            )
 
     return render(
         request,
@@ -64,5 +68,5 @@ def index(request):
             "unique_form": unique_form,
             "people_choice_form": people_choice_form,
             "cutest_form": cutest_form,
-        }
+        },
     )

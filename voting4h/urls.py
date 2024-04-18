@@ -23,4 +23,4 @@ app_name = "voting4h"
 urlpatterns = [
     # path("submit/", views.submit, name="submit"),
     path("", views.index, name="index")
-    ]
+]
