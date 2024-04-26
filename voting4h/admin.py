@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import Pet, Profile
+from .models import Pet, Ballot
 
 
 # Register your models here.
@@ -38,7 +38,7 @@ class PetAdmin(admin.ModelAdmin):
         return obj.people_choice__count
 
 
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
+@admin.register(Ballot)
+class BallotAdmin(admin.ModelAdmin):
     list_display = ["user", "vote_unique", "vote_cutest", "vote_people_choice"]
     list_filter = ["vote_unique", "vote_cutest", "vote_people_choice"]

@@ -14,13 +14,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from . import views
-from django.urls import path, re_path
-from .models import Pet
+from voting4h import views
+from django.urls import path
 
 
 app_name = "voting4h"
-urlpatterns = [
-    # path("submit/", views.submit, name="submit"),
-    path("", views.index, name="index")
-]
+urlpatterns = [path("", views.index, name="index")]

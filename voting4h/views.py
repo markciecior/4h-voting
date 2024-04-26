@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-from .forms import UniqueForm, PeopleChoiceForm, CutestForm
+from .forms import BallotForm
 from .models import Pet
 import uuid
 
@@ -17,24 +17,18 @@ def index(request):
         user = User.objects.get(pk=user_id)
 
     if request.method == "POST":
-        unique_form = UniqueForm(request.POST, prefix="unique_form")
-        cutest_form = CutestForm(request.POST, prefix="cutest_form")
-        people_choice_form = PeopleChoiceForm(request.POST, prefix="people_choice_form")
-        if (
-            unique_form.is_valid()
-            and people_choice_form.is_valid()
-            and cutest_form.is_valid()
-        ):
-            unique_pk = request.POST.get("unique_form-animal")
-            cutest_pk = request.POST.get("cutest_form-animal")
-            people_choice_pk = request.POST.get("people_choice_form-animal")
+        ballot_form = BallotForm(request.POST)
+        if ballot_form.is_valid():
+            unique_pk = request.POST.get("vote_unique")
+            cutest_pk = request.POST.get("vote_cutest")
+            people_choice_pk = request.POST.get("vote_people_choice")
             unique_pet = Pet.objects.get(id=unique_pk)
             cutest_pet = Pet.objects.get(id=cutest_pk)
             people_choice_pet = Pet.objects.get(id=people_choice_pk)
-            user.profile.vote_unique = unique_pet
-            user.profile.vote_cutest = cutest_pet
-            user.profile.vote_people_choice = people_choice_pet
-            user.profile.save()
+            user.ballot.vote_unique = unique_pet
+            user.ballot.vote_cutest = cutest_pet
+            user.ballot.vote_people_choice = people_choice_pet
+            user.ballot.save()
             messages.success(request, "Vote recorded!")
             return render(request, "voting4h/success.html", {})
         else:
@@ -44,17 +38,13 @@ def index(request):
                 "voting4h/index.html",
                 {
                     "user": user,
-                    "unique_form": unique_form,
-                    "people_choice_form": people_choice_form,
-                    "cutest_form": cutest_form,
+                    "ballot_form": ballot_form,
                 },
             )
 
     else:
-        unique_form = UniqueForm(prefix="unique_form")
-        people_choice_form = PeopleChoiceForm(prefix="people_choice_form")
-        cutest_form = CutestForm(prefix="cutest_form")
-        if user.profile.vote_cutest != None:
+        ballot_form = BallotForm()
+        if user.ballot.vote_cutest != None:
             messages.warning(
                 request,
                 "Your vote has already been recorded.  You may modify your vote below.",
@@ -65,8 +55,6 @@ def index(request):
         "voting4h/index.html",
         {
             "user": user,
-            "unique_form": unique_form,
-            "people_choice_form": people_choice_form,
-            "cutest_form": cutest_form,
+            "ballot_form": ballot_form,
         },
     )

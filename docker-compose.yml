@@ -1,0 +1,26 @@
+version: '3.2'
+
+services:
+  db:
+    image: postgres:14.5-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - type: volume
+        source: postgres_volume
+        target: /var/lib/postgresql/data
+  web:
+    image: voting4h:latest
+    env_file: .env-docker
+    command: ["/docker-entrypoint.sh"]
+    volumes:
+      - type: volume
+        source: logs_volume
+        target: /srv/logs
+    ports:
+      - "8001:80"
+    depends_on:
+      - db
+volumes:
+  postgres_volume:
+  logs_volume:

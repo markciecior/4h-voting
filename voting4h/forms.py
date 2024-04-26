@@ -1,41 +1,18 @@
 from django import forms
-from .models import Pet
+from .models import Ballot, Pet
 
 
-class UniqueForm(forms.Form):
-    ANIMAL_CHOICES = {
-        p.pk: f"{p.name} ({p.breed}) by {p.owner}" for p in Pet.objects.all()
-    }
-
-    animal = forms.ChoiceField(
-        choices=ANIMAL_CHOICES,
-        required=True,
-        label="Most Unique Pet",
-        widget=forms.RadioSelect(),
+class BallotForm(forms.ModelForm):
+    vote_unique = forms.ModelChoiceField(
+        queryset=Pet.objects, empty_label=None, widget=forms.RadioSelect()
+    )
+    vote_cutest = forms.ModelChoiceField(
+        queryset=Pet.objects, empty_label=None, widget=forms.RadioSelect()
+    )
+    vote_people_choice = forms.ModelChoiceField(
+        queryset=Pet.objects, empty_label=None, widget=forms.RadioSelect()
     )
 
-
-class PeopleChoiceForm(forms.Form):
-    ANIMAL_CHOICES = {
-        p.pk: f"{p.name} ({p.breed}) by {p.owner}" for p in Pet.objects.all()
-    }
-
-    animal = forms.ChoiceField(
-        choices=ANIMAL_CHOICES,
-        required=True,
-        label="People's Choice Pet",
-        widget=forms.RadioSelect,
-    )
-
-
-class CutestForm(forms.Form):
-    ANIMAL_CHOICES = {
-        p.pk: f"{p.name} ({p.breed}) by {p.owner}" for p in Pet.objects.all()
-    }
-
-    animal = forms.ChoiceField(
-        choices=ANIMAL_CHOICES,
-        required=True,
-        label="Cutest Pet",
-        widget=forms.RadioSelect,
-    )
+    class Meta:
+        model = Ballot
+        fields = ["vote_unique", "vote_cutest", "vote_people_choice"]

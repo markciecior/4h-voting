@@ -12,7 +12,7 @@
                 <svg class="bi me-2" width="40" height="32"><use xlink:href="{% static 'voting4h/4-h-logo.svg' %}"/></svg>
                 <span class="fs-4">Johnson County 4-H Pet Show</span>
               </a>
-        
+
               {% comment %} <ul class="nav nav-pills">
                 <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
@@ -37,15 +37,15 @@
               {% csrf_token %}
               <p class="fw-bold">Most Unique Animal</p>
               <div class="form-check mb-2">
-                {{ unique_form.animal }}
+                {{ ballot_form.vote_unique }}
               </div>
               <p class="fw-bold">Cutest Animal</p>
               <div class="form-check mb-2">
-                {{ cutest_form.animal }}
+                {{ ballot_form.vote_cutest }}
               </div>
               <p class="fw-bold">People's Choice Award</p>
               <div class="form-check mb-2">
-                {{ people_choice_form.animal }}
+                {{ ballot_form.vote_people_choice }}
               </div>
                 <div class="text-center">
                 <input type="submit" class="btn btn-primary" value="Vote!">

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-w*w@-u(o(yh!f3(r2m3p-3-(sufg#yz*^(epdt^3ws(apbkho4"
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", cast=bool, default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 
 # Application definition
@@ -70,13 +71,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mysite.wsgi.application"
 
+DB_SSLMODE = config("DB_SSLMODE", default="require")
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
-    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}
+    "default": {
+        "ENGINE": config("DB_ENGINE", default="django.db.backends.postgresql"),
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER", default=None),
+        "PASSWORD": config("DB_PASSWORD", default=None),
+        "HOST": config("DB_HOST", default=None),
+        "PORT": "",
+        "OPTIONS": {"sslmode": DB_SSLMODE},
+    }
 }
+# DATABASES = {
+#     "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}
+# }
 
 
 # Password validation
@@ -109,6 +121,21 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = "/srv/static/"
+
+EMAIL_HOST = "smtp.google.com"
+SERVER_EMAIL = "Pets-JoCo4H@markciecior.com"
+ADMINS = [("Mark", "mark@markciecior.com")]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://joco4h.org",
+    "https://joco4h.org:8000",
+    "https://joco4h.org:8001",
+    "http://joco4h.org",
+    "http://joco4h.org:8000",
+    "http://joco4h.org:8001",
+    "http://localhost:8000",
+    "http://localhost:8001",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
