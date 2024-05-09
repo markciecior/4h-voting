@@ -1,0 +1,22 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if results %}
+        <ol>
+            {% for pet in results %}
+            <li>{{ pet.vote_people_choice__name}} - {{ pet.total }}</li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+        Have fun at the fair!
+    </body>
+</html>

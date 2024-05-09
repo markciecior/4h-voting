@@ -19,4 +19,7 @@ from django.urls import path
 
 
 app_name = "voting4h"
-urlpatterns = [path("", views.index, name="index")]
+urlpatterns = [
+    path("results/", views.results, name="results"),
+    path("", views.index, name="index"),
+]
