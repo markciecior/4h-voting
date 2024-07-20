@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import Pet, Ballot
+from .models import Pet, Ballot, ManualBallot
 
 
 # Register your models here.
@@ -42,3 +42,9 @@ class PetAdmin(admin.ModelAdmin):
 class BallotAdmin(admin.ModelAdmin):
     list_display = ["user", "vote_unique", "vote_cutest", "vote_people_choice"]
     list_filter = ["vote_unique", "vote_cutest", "vote_people_choice"]
+
+
+@admin.register(ManualBallot)
+class ManualBallotAdmin(admin.ModelAdmin):
+    list_display = ["vote_people_choice"]
+    list_filter = ["vote_people_choice"]

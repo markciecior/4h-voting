@@ -35,6 +35,18 @@ class Ballot(models.Model):
         return str(self.user.username)
 
 
+class ManualBallot(models.Model):
+    vote_people_choice = models.ForeignKey(
+        Pet,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return str(self.vote_people_choice)
+
+
 @receiver(post_save, sender=User)
 def create_user_ballot(sender, instance, created, **kwargs):
     if created:
