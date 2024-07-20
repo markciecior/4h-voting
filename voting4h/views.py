@@ -42,7 +42,7 @@ def index(request):
 
     else:
         ballot_form = BallotForm()
-        if user.ballot.vote_people_choice != None:
+        if user.ballot.vote_people_choice is not None:
             messages.warning(
                 request,
                 "Your vote has already been recorded.  You may modify your vote below.",
