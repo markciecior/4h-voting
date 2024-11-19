@@ -1,8 +1,10 @@
 from collections import Counter
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
 from .forms import BallotForm, ManualBallotForm
 from .models import Pet, Ballot, ManualBallot
 import uuid
