@@ -1,6 +1,10 @@
 from django.contrib import admin
+from django.contrib.sessions.models import Session
+from django.contrib.auth.models import User
 from django.db import models
 from .models import Pet, Ballot, ManualBallot
+
+import pprint
 
 
 # Register your models here.
@@ -48,3 +52,17 @@ class BallotAdmin(admin.ModelAdmin):
 class ManualBallotAdmin(admin.ModelAdmin):
     list_display = ["vote_people_choice"]
     list_filter = ["vote_people_choice"]
+
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    def user(self, obj):
+        session_user = obj.get_decoded().get("_auth_user_id")
+        user = User.objects.get(pk=session_user)
+        return user.email
+
+    def _session_data(self, obj):
+        return pprint.pformat(obj.get_decoded()).replace("\n", "<br>\n")
+
+    list_display = ["user", "session_key", "_session_data", "expire_date"]
+    readonly_fields = ["_session_data"]
