@@ -5,7 +5,6 @@ from django.urls import reverse
 def login_required_fingerprint(view_func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
-            print("redirecting to fp login")
             return HttpResponseRedirect(
                 f"{reverse("django_fingerprint:fplogin")}?next={request.path}"
             )
