@@ -21,6 +21,6 @@ from django.urls import path
 
 app_name = "django_fingerprint"
 urlpatterns = [
-    # path("fp/<str:fpid>/", views.fp, name="fp"),
     path("fp/", views.fp, name="fp"),
+    path("login/", views.fplogin, name="fplogin"),
 ]
