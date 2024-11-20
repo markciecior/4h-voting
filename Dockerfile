@@ -48,6 +48,7 @@ COPY django_nginx.conf /etc/nginx/sites-available/
 COPY nginx.conf /etc/nginx/
 
 # Copy application source code to SRCDIR
+COPY django_fingerprint $DOCKYARD_SRVHOME/django_fingerprint
 COPY mysite $DOCKYARD_SRVHOME/mysite
 COPY voting4h $DOCKYARD_SRVHOME/voting4h
 COPY manage.py $DOCKYARD_SRVHOME/manage.py
