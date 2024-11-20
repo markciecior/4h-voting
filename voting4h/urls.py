@@ -24,7 +24,6 @@ app_name = "voting4h"
 urlpatterns = [
     path("results/", views.results, name="results"),
     path("manual/", views.manual, name="manual"),
-    # path("fp/<str:fpid>/", views.fp, name="fp"),
     path("fp/", djf_views.fp, name="fp"),
     path("", views.index, name="index"),
 ]
