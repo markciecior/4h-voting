@@ -4,10 +4,10 @@ from django.contrib import messages
 from django.db.models import Count
 from .forms import BallotForm, ManualBallotForm
 from .models import Pet, Ballot, ManualBallot
-from django_fingerprint.decorators import login_required_fingerprint
+from django_thumbmark.decorators import login_required_thumbmark
 
 
-@login_required_fingerprint
+@login_required_thumbmark
 def index(request):
     if request.method == "POST":
         ballot_form = BallotForm(request.POST)

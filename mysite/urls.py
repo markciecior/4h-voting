@@ -21,5 +21,4 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("voting4h.urls")),
-    path("fp/", include("django_fingerprint.urls")),
 ]
