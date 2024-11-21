@@ -17,13 +17,11 @@ Including another URLconf
 
 from voting4h import views
 from django.urls import path
-from django_fingerprint import views as djf_views
 
 
 app_name = "voting4h"
 urlpatterns = [
     path("results/", views.results, name="results"),
     path("manual/", views.manual, name="manual"),
-    path("fp/", djf_views.fp, name="fp"),
     path("", views.index, name="index"),
 ]
