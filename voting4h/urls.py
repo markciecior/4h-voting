@@ -18,10 +18,13 @@ Including another URLconf
 from voting4h import views
 from django.urls import path
 
+from django_thumbmark.views import DjTmLoginView, DjTmScriptView
 
 app_name = "voting4h"
 urlpatterns = [
     path("results/", views.results, name="results"),
     path("manual/", views.manual, name="manual"),
+    path("tm/", DjTmScriptView.as_view(), name="tm"),
+    path("login/", DjTmLoginView.as_view(), name="tmlogin"),
     path("", views.index, name="index"),
 ]
