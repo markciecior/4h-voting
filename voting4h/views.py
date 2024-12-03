@@ -1,10 +1,15 @@
 from collections import Counter
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
 from django.db.models import Count
 from .forms import BallotForm, ManualBallotForm
 from .models import Pet, Ballot, ManualBallot
 from django_thumbmark.decorators import login_required_thumbmark
+
+import altair as alt
+import pandas as pd
+from datetime import datetime, timedelta
 
 
 @login_required_thumbmark
@@ -106,3 +111,109 @@ def results(request):
         "voting4h/results.html",
         {"results": sorted(results.items(), reverse=True)},
     )
+
+
+def graph(request):
+    return render(request, "voting4h/graph.html")
+
+
+def api_graph1(request):
+    retVal = Ballot.objects.all().values(
+        "user_id", "user__date_joined", "vote_people_choice__name"
+    )
+    df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
+    df.rename(
+        columns={"vote_people_choice__name": "Pet", "user__date_joined": "Date"},
+        inplace=True,
+    )
+
+    chart = (
+        alt.Chart(df, title="Votes by Pet")
+        .mark_bar()
+        .encode(
+            x=alt.X("count(Pet)", title="Total Votes"),
+            y=alt.Y("Pet", sort="-x", title="Pet"),
+            color="Pet",
+            tooltip=["count(Pet)"],
+            order=alt.Order("count(Pet)", sort="descending"),
+        )
+        .properties(width=400)
+    )
+    return HttpResponse(chart.to_json(), content_type="application/json")
+
+
+def api_graph2(request):
+    retVal = Ballot.objects.filter(
+        user__date_joined__lte=datetime(2024, 7, 21, 14, 0)
+    ).values("user_id", "user__date_joined", "vote_people_choice__name")
+    df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
+    df.rename(
+        columns={"vote_people_choice__name": "Pet", "user__date_joined": "Date"},
+        inplace=True,
+    )
+
+    chart = (
+        alt.Chart(df, title="Votes over Time")
+        .mark_bar(
+            width=2,
+        )
+        .encode(
+            x=alt.X("Date:T"),
+            y=alt.Y("Pet:N"),
+            color="Pet:N",
+        )
+        .properties(width=400)
+    )
+    return HttpResponse(chart.to_json(), content_type="application/json")
+
+
+def api_graph3(request):
+    retVal = Ballot.objects.filter(
+        user__date_joined__lte=datetime(2024, 7, 21, 14, 0)
+    ).values("user_id", "user__date_joined", "vote_people_choice__name")
+    df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
+    df.rename(
+        columns={"vote_people_choice__name": "Pet", "user__date_joined": "Date"},
+        inplace=True,
+    )
+
+    chart = (
+        alt.Chart(df, title="Cumulative Votes by Pet")
+        .mark_circle(size=60)
+        .transform_window(
+            cumulative_count="count(Pet)", sort=[{"field": "Date"}], groupby=["Pet"]
+        )
+        .encode(
+            x="Date:T",
+            y=alt.Y("cumulative_count:Q"),
+            color="Pet",
+        )
+        .properties(width=400)
+    )
+    return HttpResponse(chart.to_json(), content_type="application/json")
+
+
+def api_graph4(request):
+    retVal = Ballot.objects.filter(
+        user__date_joined__lte=datetime(2024, 7, 21, 14, 0)
+    ).values("user_id", "user__date_joined", "vote_people_choice__name")
+    df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
+    df.rename(
+        columns={"vote_people_choice__name": "Pet", "user__date_joined": "Date"},
+        inplace=True,
+    )
+
+    chart = (
+        alt.Chart(df, title="Cumulative Votes by Pet")
+        .mark_area(opacity=0.3)
+        .transform_window(
+            cumulative_count="count(Pet)", sort=[{"field": "Date"}], groupby=["Pet"]
+        )
+        .encode(
+            x=alt.X("Date:T"),
+            y=alt.Y("cumulative_count:Q").stack(None),
+            color="Pet:N",
+        )
+        .properties(width=400)
+    )
+    return HttpResponse(chart.to_json(), content_type="application/json")
