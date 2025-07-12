@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from django.db import models
-from .models import Pet, Ballot, ManualBallot, Show
+from .models import Pet, Ballot, ManualBallot, Show, UserProfile
 
 import pprint
 
@@ -53,6 +53,12 @@ class BallotAdmin(admin.ModelAdmin):
 class ManualBallotAdmin(admin.ModelAdmin):
     list_display = ["vote_people_choice"]
     list_filter = ["vote_people_choice"]
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ["user", "date_joined", "user_agent"]
+    list_filter = ["date_joined"]
 
 
 @admin.register(Show)

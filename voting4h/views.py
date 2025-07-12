@@ -39,6 +39,10 @@ def index(request):
 
     else:
         ballot_form = BallotForm()
+        user_agent = request.headers.get("user-agent", "")
+        if request.user.userprofile.user_agent != user_agent:
+            request.user.userprofile.user_agent = user_agent
+            request.user.userprofile.save()
         if request.user.ballot.vote_people_choice is not None:
             messages.warning(
                 request,

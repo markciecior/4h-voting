@@ -24,11 +24,11 @@
         </ul>
         {% endif %}
         {% if results %}
-        <ol>
+        <ul>
             {% for pet, total in results %}
             <li>{{ pet }} - {{ total }}</li>
             {% endfor %}
-        </ol>
+        </ul>
         {% endif %}
     </body>
 </html>
