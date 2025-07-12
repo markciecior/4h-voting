@@ -52,6 +52,13 @@ class Ballot(models.Model):
 
 
 class ManualBallot(models.Model):
+    show = models.ForeignKey(
+        Show,
+        on_delete=models.CASCADE,
+        related_name="manualballots",
+        blank=True,
+        null=True,
+    )
     vote_people_choice = models.ForeignKey(
         Pet,
         on_delete=models.CASCADE,
@@ -66,7 +73,14 @@ class ManualBallot(models.Model):
 @receiver(post_save, sender=User)
 def create_user_ballot(sender, instance, created, **kwargs):
     if created:
-        Ballot.objects.create(user=instance)
+        Ballot.objects.create(
+            user=instance,
+            show=(
+                Show.objects.filter(active=True).last()
+                if Show.objects.filter(active=True).exists()
+                else None
+            ),
+        )
 
 
 @receiver(post_save, sender=User)
