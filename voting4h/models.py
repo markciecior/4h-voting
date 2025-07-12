@@ -6,7 +6,20 @@ from django.dispatch import receiver
 User = get_user_model()
 
 
+class Show(models.Model):
+    name = models.CharField("Show Name", max_length=200, default="")
+    date = models.DateField("Show Date", blank=True, null=True)
+    location = models.CharField("Show Location", max_length=200, default="")
+    active = models.BooleanField("Active Show", default=False)
+
+    def __str__(self):
+        return f"{self.name} at {self.location} on {self.date}"
+
+
 class Pet(models.Model):
+    show = models.ForeignKey(
+        Show, on_delete=models.CASCADE, related_name="pets", blank=True, null=True
+    )
     name = models.CharField("Pet Name", max_length=200, default="")
     owner = models.CharField("Pet Owner", max_length=200, default="")
     breed = models.CharField("Pet Breed", max_length=200, default="")
@@ -17,6 +30,9 @@ class Pet(models.Model):
 
 class Ballot(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    show = models.ForeignKey(
+        Show, on_delete=models.CASCADE, related_name="ballots", blank=True, null=True
+    )
     vote_unique = models.ForeignKey(
         Pet, on_delete=models.CASCADE, related_name="unique", blank=True, null=True
     )

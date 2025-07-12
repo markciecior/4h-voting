@@ -1,5 +1,5 @@
-# Set the base image to use to py3.9
-FROM python:3.11.7-slim-bullseye
+# Set the base image to use to py3.13.5-slim-bullseye
+FROM python:3.13.5-slim-bullseye
 
 #Disable buffering to stdin/stdout
 ENV PYTHONUNBUFFERED=1

@@ -88,7 +88,7 @@ def manual(request):
 
 def results(request):
     results = (
-        Ballot.objects.all()
+        Ballot.objects.filter(show__active=True)
         .values("vote_people_choice__name")
         .annotate(total=Count("vote_people_choice"))
         .order_by("-total")
@@ -96,7 +96,7 @@ def results(request):
     results2 = [{i["vote_people_choice__name"]: i["total"]} for i in results]
     results3 = {k: v for pet in results2 for k, v in pet.items()}
     manual_results = (
-        ManualBallot.objects.all()
+        ManualBallot.objects.filter(show__active=True)
         .values("vote_people_choice__name")
         .annotate(total=Count("vote_people_choice"))
         .order_by("-total")
@@ -118,7 +118,7 @@ def graph(request):
 
 
 def api_graph1(request):
-    retVal = Ballot.objects.all().values(
+    retVal = Ballot.objects.filter(show__active=True).values(
         "user_id", "user__date_joined", "vote_people_choice__name"
     )
     df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
@@ -144,7 +144,8 @@ def api_graph1(request):
 
 def api_graph2(request):
     retVal = Ballot.objects.filter(
-        user__date_joined__lte=datetime(2024, 7, 21, 14, 0)
+        user__date_joined__lte=datetime(2024, 7, 21, 14, 0),
+        show__active=True,
     ).values("user_id", "user__date_joined", "vote_people_choice__name")
     df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
     df.rename(
@@ -169,7 +170,8 @@ def api_graph2(request):
 
 def api_graph3(request):
     retVal = Ballot.objects.filter(
-        user__date_joined__lte=datetime(2024, 7, 21, 14, 0)
+        user__date_joined__lte=datetime(2024, 7, 21, 14, 0),
+        show__active=True,
     ).values("user_id", "user__date_joined", "vote_people_choice__name")
     df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
     df.rename(
@@ -195,7 +197,8 @@ def api_graph3(request):
 
 def api_graph4(request):
     retVal = Ballot.objects.filter(
-        user__date_joined__lte=datetime(2024, 7, 21, 14, 0)
+        user__date_joined__lte=datetime(2024, 7, 21, 14, 0),
+        show__active=True,
     ).values("user_id", "user__date_joined", "vote_people_choice__name")
     df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
     df.rename(
