@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from django.db import models
-from .models import Pet, Ballot, ManualBallot
+from .models import Pet, Ballot, ManualBallot, Show
 
 import pprint
 
@@ -17,8 +17,9 @@ class PetAdmin(admin.ModelAdmin):
         "cutest_count",
         "unique_count",
         "people_choice_count",
+        "show",
     ]
-    list_filter = ["name", "owner", "breed"]
+    list_filter = ["name", "owner", "breed", "show"]
 
     def get_queryset(self, request):
         qs = super(PetAdmin, self).get_queryset(request)
@@ -44,14 +45,19 @@ class PetAdmin(admin.ModelAdmin):
 
 @admin.register(Ballot)
 class BallotAdmin(admin.ModelAdmin):
-    list_display = ["user", "vote_unique", "vote_cutest", "vote_people_choice"]
-    list_filter = ["vote_unique", "vote_cutest", "vote_people_choice"]
+    list_display = ["user", "vote_unique", "vote_cutest", "vote_people_choice", "show"]
+    list_filter = ["vote_unique", "vote_cutest", "vote_people_choice", "show"]
 
 
 @admin.register(ManualBallot)
 class ManualBallotAdmin(admin.ModelAdmin):
     list_display = ["vote_people_choice"]
     list_filter = ["vote_people_choice"]
+
+
+@admin.register(Show)
+class ShowAdmin(admin.ModelAdmin):
+    list_display = ["name", "date", "location", "active"]
 
 
 @admin.register(Session)
