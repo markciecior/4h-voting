@@ -10,7 +10,9 @@ class BallotForm(forms.ModelForm):
     #     queryset=Pet.objects, empty_label=None, widget=forms.RadioSelect()
     # )
     vote_people_choice = forms.ModelChoiceField(
-        queryset=Pet.objects, empty_label=None, widget=forms.RadioSelect()
+        queryset=Pet.objects.filter(show__active=True),
+        empty_label=None,
+        widget=forms.RadioSelect(),
     )
 
     class Meta:
@@ -26,7 +28,9 @@ class ManualBallotForm(forms.ModelForm):
     #     queryset=Pet.objects, empty_label=None, widget=forms.RadioSelect()
     # )
     vote_people_choice = forms.ModelChoiceField(
-        queryset=Pet.objects, empty_label=None, widget=forms.RadioSelect()
+        queryset=Pet.objects.filter(show__active=True),
+        empty_label=None,
+        widget=forms.RadioSelect(),
     )
 
     class Meta:
