@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.db.models import Count
 from .forms import BallotForm, ManualBallotForm
-from .models import Pet, Ballot, ManualBallot
+from .models import Pet, Ballot, ManualBallot, Show
 from django_thumbmark.decorators import login_required_thumbmark
 
 import altair as alt
@@ -144,7 +144,7 @@ def api_graph1(request):
 
 def api_graph2(request):
     retVal = Ballot.objects.filter(
-        user__date_joined__lte=datetime(2024, 7, 21, 14, 0),
+        # user__date_joined__lte=datetime(2025, 7, 21, 14, 0),
         show__active=True,
     ).values("user_id", "user__date_joined", "vote_people_choice__name")
     df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
@@ -170,7 +170,7 @@ def api_graph2(request):
 
 def api_graph3(request):
     retVal = Ballot.objects.filter(
-        user__date_joined__lte=datetime(2024, 7, 21, 14, 0),
+        # user__date_joined__lte=datetime(2025, 7, 21, 14, 0),
         show__active=True,
     ).values("user_id", "user__date_joined", "vote_people_choice__name")
     df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
@@ -197,7 +197,7 @@ def api_graph3(request):
 
 def api_graph4(request):
     retVal = Ballot.objects.filter(
-        user__date_joined__lte=datetime(2024, 7, 21, 14, 0),
+        # user__date_joined__lte=datetime(2025, 7, 21, 14, 0),
         show__active=True,
     ).values("user_id", "user__date_joined", "vote_people_choice__name")
     df = pd.DataFrame.from_records(retVal).dropna(subset="vote_people_choice__name")
