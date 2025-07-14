@@ -28,6 +28,8 @@ DEBUG = config("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
+USE_X_FORWARDED_HOST = True
+
 
 # Application definition
 

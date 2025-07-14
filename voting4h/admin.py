@@ -57,7 +57,7 @@ class ManualBallotAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ["user", "date_joined", "user_agent"]
+    list_display = ["user", "date_joined", "user_agent", "ip_address"]
     list_filter = ["date_joined"]
 
 

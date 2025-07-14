@@ -43,6 +43,12 @@ def index(request):
         if request.user.userprofile.user_agent != user_agent:
             request.user.userprofile.user_agent = user_agent
             request.user.userprofile.save()
+        ip_address = request.headers.get(
+            "x-forwarded-for", request.META.get("REMOTE_ADDR")
+        )
+        if request.user.userprofile.ip_address != ip_address:
+            request.user.userprofile.ip_address = ip_address
+            request.user.userprofile.save()
         if request.user.ballot.vote_people_choice is not None:
             messages.warning(
                 request,
