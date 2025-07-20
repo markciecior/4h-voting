@@ -1,10 +1,17 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from django.db import models
 from .models import Pet, Ballot, ManualBallot, Show, UserProfile
 
 import pprint
+
+
+class UserAdmin(BaseUserAdmin):
+    list_display = ("username", "date_joined", "ballot__vote_people_choice")
+    list_filter = ("date_joined",)
+    ordering = ("-date_joined",)
 
 
 # Register your models here.
@@ -78,3 +85,8 @@ class SessionAdmin(admin.ModelAdmin):
 
     list_display = ["user", "session_key", "_session_data", "expire_date"]
     readonly_fields = ["_session_data"]
+
+
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
