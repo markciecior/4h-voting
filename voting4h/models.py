@@ -95,6 +95,15 @@ def create_user_ballot(sender, instance, created, **kwargs):
                 else None
             ),
         )
+    if instance.ballot is None:
+        Ballot.objects.create(
+            user=instance,
+            show=(
+                Show.objects.filter(active=True).last()
+                if Show.objects.filter(active=True).exists()
+                else None
+            ),
+        )
 
 
 @receiver(post_save, sender=User)
@@ -103,6 +112,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(
             user=instance,
         )
+    if instance.userprofile is None:
+        UserProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
